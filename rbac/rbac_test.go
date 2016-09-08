@@ -113,11 +113,19 @@ func TestRBAC(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(ps))
 
+	permit, err = rbac.IsPermit(system, uid_guest, write)
+	assert.Nil(t, err)
+	assert.True(t, permit)
+
 	// RemovePermissionFromRole
 	assert.Nil(t, rbac.RemovePermissionFromRole(system, guest, write))
 	ps, err = rbac.GetPermissionsOfRole(system, guest)
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(ps))
+
+	permit, err = rbac.IsPermit(system, uid_guest, write)
+	assert.Nil(t, err)
+	assert.False(t, permit)
 
 	// GetAllRolesByUID
 	rs, err := rbac.GetAllRolesByUID(system, uid_admin)
