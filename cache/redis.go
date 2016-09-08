@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/garyburd/redigo/redis"
-	"github.com/nzqpeace/log"
 )
 
 //Redis object
@@ -81,7 +80,6 @@ func NewRedisPool(config *RedisConfig) *redis.Pool {
 				conn.Close() // close connection to sentinel
 
 				// connect to master redis node
-				log.Info("connect to master redis[%s]", masterAddr)
 				conn, err = redis.Dial("tcp", masterAddr)
 				if err != nil {
 					return nil, err
@@ -91,14 +89,12 @@ func NewRedisPool(config *RedisConfig) *redis.Pool {
 			if _, err := conn.Do("AUTH", config.Password); err != nil {
 				if strings.Contains(err.Error(), "invalid password") {
 					conn.Close()
-					// log.Error("auth to redis[%s] failed, current auth password[%s], %v", masterAddr, r.Password, err)
 					return nil, err
 				}
 			}
 
 			if _, err := conn.Do("SELECT", config.DB); err != nil {
 				conn.Close()
-				// log.Error("select wrong db number[%d], redis[%s] %v", r.DB, masterAddr, err)
 				return nil, err
 			}
 

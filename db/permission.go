@@ -3,7 +3,7 @@ package db
 import (
 	"math"
 
-	"github.com/nzqpeace/rbac/rbac/model"
+	"github.com/nzqpeace/rbac/model"
 	"gopkg.in/mgo.v2/bson"
 )
 

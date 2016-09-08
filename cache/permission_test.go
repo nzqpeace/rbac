@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/nzqpeace/rbac/rbac/db"
-	"github.com/nzqpeace/rbac/rbac/model"
+	"github.com/nzqpeace/rbac/db"
+	"github.com/nzqpeace/rbac/model"
 	"github.com/stretchr/testify/assert"
 )
 
