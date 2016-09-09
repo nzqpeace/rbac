@@ -20,6 +20,12 @@ type (
 	}
 )
 
+func DefaultConf() *MgoConf {
+	return &MgoConf{
+		Url: "localhost/cowshed",
+	}
+}
+
 func Init(conf *MgoConf) (base *DataBase, err error) {
 	mgoAddr, dbName, err := parseMgoAddr(conf.Url)
 	if err != nil {

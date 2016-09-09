@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/nzqpeace/devgroup/rbac"
+	"github.com/nzqpeace/rbac"
+	"github.com/nzqpeace/rbac/cache"
+	"github.com/nzqpeace/rbac/db"
 )
 
 type ForumPerm int
@@ -29,47 +31,80 @@ func (f ForumPerm) String() string {
 	case ForumPermDelete:
 		return "delete"
 	default:
-		return ""
+		return "unknown"
+	}
+}
+
+var (
+	r *rbac.RBAC
+)
+
+const (
+	system = "Cowshed"
+
+	// permissions
+	read   = "read"
+	write  = "write"
+	manage = "manage"
+
+	// roles
+	guest  = "guest"
+	common = "common"
+	admin  = "admin"
+
+	// uid
+	uid_guest  = "uid_guest"
+	uid_common = "uid_common"
+	uid_admin  = "uid_admin"
+)
+
+func init() {
+	conf := &rbac.RBACConfig{
+		Redis: cache.DefaultConfig(),
+		Mgo: &db.MgoConf{
+			Url: "localhost/test",
+		},
+	}
+
+	var err error
+	r, err = rbac.NewRBAC(conf)
+	if err != nil {
+		fmt.Println(err)
 	}
 }
 
 func main() {
-	r := rbac.NewRBAC()
+	// register permissions
+	r.RegisterPermission(system, read, "read question/answer/comment")
+	r.RegisterPermission(system, write, "post question/answer/comment")
+	r.RegisterPermission(system, manage, "manage question and answer")
 
-	permRead := rbac.NewPermission(int(ForumPermRead), ForumPermRead.String(), ForumPermRead.String()+"'s desc")
-	permPost := rbac.NewPermission(int(ForumPermPost), ForumPermPost.String(), ForumPermPost.String()+"'s desc")
-	permReply := rbac.NewPermission(int(ForumPermReply), ForumPermReply.String(), ForumPermReply.String()+"'s desc")
-	permComment := rbac.NewPermission(int(ForumPermComment), ForumPermComment.String(), ForumPermComment.String()+"'s desc")
-	permDelete := rbac.NewPermission(int(ForumPermDelete), ForumPermDelete.String(), ForumPermDelete.String()+"'s desc")
+	// register roles
+	r.RegisterRole(system, guest, "", read)
+	r.RegisterRole(system, common, "", read, write)
+	r.RegisterRole(system, admin, "", read, write, manage)
 
-	roleGuest := rbac.NewRole("guest", "guest only can read post", permRead)
-	roleCommon := rbac.NewRole("common", "common user can post and reply", permRead, permPost, permReply, permComment)
-	roleAdmin := rbac.NewRole("admin", "admin has all permisions", permRead, permPost, permReply, permComment, permDelete)
+	// register users
+	r.RegisterUser(system, uid_guest, guest)
+	r.RegisterUser(system, uid_common, common)
+	r.RegisterUser(system, uid_admin, common, admin)
 
-	// register permissions and roles
-	r.RegisterPermission(permRead)
-	r.RegisterPermission(permPost)
-	r.RegisterPermission(permReply)
-	r.RegisterPermission(permComment)
-	r.RegisterPermission(permDelete)
+	// check
+	permit, err := r.IsPermit(system, uid_common, manage)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(permit) // false
 
-	r.RegisterRole(roleGuest)
-	r.RegisterRole(roleCommon)
-	r.RegisterRole(roleAdmin)
+	permit, err = r.IsPermit(system, uid_common, write)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(permit) // true
 
-	// associated uid with rbac model
-	u1 := rbac.NewUserPermModel("u1", roleGuest)
-	u2 := rbac.NewUserPermModel("u2", roleCommon)
-	u3 := rbac.NewUserPermModel("u3", roleAdmin)
-
-	fmt.Println(u1.Permit(permPost)) // false
-	fmt.Println(u1.Permit(permRead)) // true
-
-	fmt.Println(u2.Permit(permPost)) // true
-	u2.BL.Add(permPost)
-	fmt.Println(u2.Permit(permPost)) // false
-	u2.BL.Remove(permPost)
-	fmt.Println(u2.Permit(permPost)) // true
-
-	u3.WL.Add(permDelete)
+	permit, err = r.IsPermit(system, uid_common, read)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(permit) // true
 }

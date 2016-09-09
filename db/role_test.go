@@ -72,6 +72,13 @@ func TestRole(t *testing.T) {
 	assert.NotEqual(t, guest.Name, r.Name)
 	assert.Equal(t, "user", r.Name)
 
+	// query role which not exist
+	r, err = roleDao.GetRole(system, "not_exist")
+	assert.NotNil(t, err)
+	assert.Equal(t, "not found", err.Error())
+	// assert.NotEqual(t, guest.Name, r.Name)
+	// assert.Equal(t, "user", r.Name)
+
 	// grant permissions
 	assert.Nil(t, roleDao.GrantPermissions(system, "guest", "write", "manage"))
 	r, err = roleDao.GetRole(system, "guest")

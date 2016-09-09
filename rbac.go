@@ -121,8 +121,9 @@ func (r *RBAC) UnregisterUser(system, uid string) error {
 }
 
 // UpdateUser update user info
-func (r *RBAC) UpdateUser(system, uid string, user *model.UserPermModel) error {
-	return r.User.UpdateUserPermModel(system, uid, user)
+func (r *RBAC) UpdateUser(system, uid string, new_roles ...string) error {
+	u := model.NewUserPermModel(system, uid, new_roles...)
+	return r.User.UpdateUserPermModel(system, uid, u)
 }
 
 // GetUser get user info
