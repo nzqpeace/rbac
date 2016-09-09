@@ -22,7 +22,9 @@ const (
 	NotFound  = "not found"
 	Success   = "success"
 	BadParams = "bad params"
+)
 
+const (
 	ErrOK ErrCode = iota
 	ErrNotFound
 	ErrBadPrams
@@ -65,6 +67,7 @@ func validateParams(c *iris.Context, params interface{}) error {
 }
 
 func checkUrlParams(c *iris.Context, names ...string) (params map[string]string, err error) {
+	params = make(map[string]string)
 	for _, name := range names {
 		value := c.URLParam(name)
 		if value == "" {
@@ -82,6 +85,14 @@ func checkUrlParams(c *iris.Context, names ...string) (params map[string]string,
 
 func (api *RbacApi) responseByError(c *iris.Context, err error) {
 	if err != nil {
+		if strings.Contains(err.Error(), NotFound) {
+			c.JSON(http.StatusOK, iris.Map{
+				"code":    ErrNotFound,
+				"message": err.Error(),
+			})
+			return
+		}
+
 		c.JSON(http.StatusInternalServerError, iris.Map{
 			"code":    ErrInternelServerError,
 			"message": err.Error(),
@@ -96,6 +107,14 @@ func (api *RbacApi) responseByError(c *iris.Context, err error) {
 
 func (api *RbacApi) responseAdditionData(c *iris.Context, err error, jsonKey string, jsonValue interface{}) {
 	if err != nil {
+		if strings.Contains(err.Error(), NotFound) {
+			c.JSON(http.StatusOK, iris.Map{
+				"code":    ErrNotFound,
+				"message": err.Error(),
+			})
+			return
+		}
+
 		c.JSON(http.StatusInternalServerError, iris.Map{
 			"code":    ErrInternelServerError,
 			"message": err.Error(),
@@ -189,7 +208,10 @@ func (api *RbacApi) RegisterRole(c *iris.Context) {
 
 // UnregisterRole unregister specified role of specified system
 func (api *RbacApi) UnregisterRole(c *iris.Context) {
-	var role model.Role
+	var role struct {
+		System string `json:"system" validate:"required"`
+		Name   string `json:"name" validate:"required"`
+	}
 	if validateParams(c, &role) != nil {
 		return
 	}
@@ -219,7 +241,7 @@ func (api *RbacApi) GetRoleOfSystem(c *iris.Context) {
 		return
 	}
 
-	role, err := api.rbac.GetRoleOfSystem(params["system"], params["name"])
+	role, err := api.rbac.GetRoleOfSystem(params["system"], params["role"])
 	if err != nil && strings.Contains(err.Error(), NotFound) {
 		c.JSON(http.StatusOK, iris.Map{
 			"code":    ErrNotFound,
@@ -233,7 +255,7 @@ func (api *RbacApi) GetRoleOfSystem(c *iris.Context) {
 
 // GetAllRolesOfSystem get all roles of specified system
 func (api *RbacApi) GetAllRolesOfSystem(c *iris.Context) {
-	params, err := checkUrlParams(c, "system", "role")
+	params, err := checkUrlParams(c, "system")
 	if err != nil {
 		return
 	}
@@ -403,7 +425,10 @@ func (api *RbacApi) RemoveRoles(c *iris.Context) {
 	var p struct {
 		System string `json:"system"  validate:"required"`
 		UID    string `json:"uid" validate:"required"`
-		Role   string `json:"roles"validate:"required"`
+		Role   string `json:"role" validate:"required"`
+	}
+	if validateParams(c, &p) != nil {
+		return
 	}
 
 	err := api.rbac.RemoveRoles(p.System, p.UID, p.Role)
@@ -472,7 +497,7 @@ func (api *RbacApi) GetWhiteList(c *iris.Context) {
 		return
 	}
 
-	wl, err := api.rbac.GetBlackList(params["system"], params["uid"])
+	wl, err := api.rbac.GetWhiteList(params["system"], params["uid"])
 	api.responseAdditionData(c, err, "whitelist", wl)
 }
 

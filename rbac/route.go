@@ -12,6 +12,17 @@ func registerRoute(config *Config) error {
 		return err
 	}
 
+	// check check whether have specified permission
+	// URL params: system, uid, permission
+	//
+	// Response
+	// {
+	//     "code": 0, // 0-success
+	//     "message":message,
+	//     "permit":true // true or false
+	// }
+	iris.Get("/authenticate", rbacAPI.IsPermit)
+
 	// register permission
 	// Json params:
 	// {
@@ -194,7 +205,7 @@ func registerRoute(config *Config) error {
 	// Json params:
 	// {
 	//     "system":system,
-	//     "name":name,
+	//     "role":rolename,
 	//     "permissions":[
 	//         "permission1",
 	//         "permission2"
@@ -212,7 +223,7 @@ func registerRoute(config *Config) error {
 	// Json params:
 	// {
 	//     "system":system,
-	//     "role":name,
+	//     "role":rolename,
 	//     "permission":permission
 	// }
 	//
