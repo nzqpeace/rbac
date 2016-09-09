@@ -1,0 +1,24 @@
+{
+    "redis":{
+        "address":"localhost:6379",
+        "password":"",
+        "db":0,
+        "max_conn":100,
+        "idle_timeout":60,
+        "retry_interval":0,
+        "retry_times":0
+    },
+
+    "mongo":{
+        "url":"mongodb://localhost/cowshed"
+    },
+
+    "log":{
+        "output":"./logs/cowshed.log",
+        "level":"info"
+    },
+
+    "http_server":{
+        "address":":60001"
+    }
+}

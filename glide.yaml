@@ -1,0 +1,14 @@
+package: github.com/nzqpeace/rbac
+import:
+- package: github.com/Sirupsen/logrus
+- package: github.com/deckarep/golang-set
+- package: github.com/garyburd/redigo
+  subpackages:
+  - redis
+- package: gopkg.in/mgo.v2
+  subpackages:
+  - bson
+testImport:
+- package: github.com/stretchr/testify
+  subpackages:
+  - assert
