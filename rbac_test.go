@@ -48,6 +48,7 @@ func init() {
 }
 
 func fillTestData(t *testing.T) {
+	assert.NotNil(t, rbac)
 	// register permissions
 	assert.Nil(t, rbac.RegisterPermission(system, read, "read question/answer/comment"))
 	assert.Nil(t, rbac.RegisterPermission(system, write, "post question/answer/comment"))
