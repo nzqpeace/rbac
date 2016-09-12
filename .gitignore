@@ -42,7 +42,8 @@ tmp/
 config.json
 
 # binary executable
-./rbac
+rbac/rbac
+example/example
 
 # vendor
 vendor/

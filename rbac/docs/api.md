@@ -2,7 +2,7 @@
 
 [TOC]
 
-> Note: 请求中用到的 system 表示业务方名称，uid 是业务方 uid，permission 表示权限名称，role 表示角色名称，blacklist 表示权限黑名单，whitelist 表示权限白名单
+> Note: 请求中用到的 system 表示业务方名称，uid 是业务方 uid，permission 表示权限名称，role 表示角色名称，blacklist 表示权限黑名单，whitelist 表示权限白名单
 
 ### 校验是否有指定权限
 
@@ -14,13 +14,13 @@
 
 #### 请求
 
-```h
+```
 Get /authenticate?system={system}&&uid={uid}&&permission={permission}
 ```
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message,
@@ -34,10 +34,9 @@ Get /authenticate?system={system}&&uid={uid}&&permission={permission}
 
 #### 请求
 
-```son
+```
 Post /permission
 
-Json params:
 {
     "system":system,
     "name":name,
@@ -47,7 +46,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -58,10 +57,9 @@ Json params:
 
 #### 请求
 
-```json
+```
 Delete /permission
 
-Json params:
 {
     "system":system,
     "name":name
@@ -71,7 +69,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -88,7 +86,7 @@ Get /permission?system={system}
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message,
@@ -114,7 +112,6 @@ Get /permission?system={system}
 ```
 Put /permission
 
-Json params
 {
     "system":system,
     "oldname":oldname,
@@ -124,7 +121,7 @@ Json params
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -138,7 +135,6 @@ Json params
 ```
 Post /role
 
-Json params:
 {
     "system":system,
     "name":name,
@@ -152,7 +148,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -166,7 +162,6 @@ Json params:
 ```
 Delete /role
 
-Json params:
 {
     "system":system,
     "name":name
@@ -175,7 +170,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -192,7 +187,7 @@ Get /role?system={system}&role={rolename}
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message,
@@ -218,7 +213,7 @@ Get /role/all?system={system}
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message,
@@ -252,7 +247,6 @@ Get /role/all?system={system}
 ```
 Put /role
 
-Json params:
 {
     "system":system,
     "oldname":oldname,
@@ -262,7 +256,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -279,7 +273,7 @@ Get /role/permissions?system={system}&role={rolename}
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message,
@@ -297,7 +291,6 @@ Get /role/permissions?system={system}&role={rolename}
 ```
 Put /role/permissions/grant
 
-Json params:
 {
     "system":system,
     "role":rolename,
@@ -310,7 +303,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -324,7 +317,6 @@ Json params:
 ```
 Put /role/permissions/remove
 
-Json params:
 {
     "system":system,
     "role":rolename,
@@ -334,7 +326,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -348,7 +340,6 @@ Json params:
 ```
 Post /user
 
-Json params:
 {
     "system":system,
     "uid":uid,
@@ -361,7 +352,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -375,7 +366,6 @@ Json params:
 ```
 Delete /user
 
-Json params:
 {
     "system":system,
     "uid":uid
@@ -384,7 +374,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -398,7 +388,6 @@ Json params:
 ```
 Put /user
 
-Json params:
 {
     "system":system,
     "uid":uid,
@@ -411,7 +400,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -428,7 +417,7 @@ Get /user?system={system}&uid={uid}
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message,
@@ -461,7 +450,7 @@ Get /user/roles?system={system}&uid={uid}
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message,
@@ -479,7 +468,6 @@ Get /user/roles?system={system}&uid={uid}
 ```
 Put /user/roles
 
-Json params:
 {
     "system":system,
     "uid":uid,
@@ -492,7 +480,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -506,7 +494,6 @@ Json params:
 ```
 Put /user/roles/add
 
-Json params:
 {
     "system":system,
     "uid":uid,
@@ -519,7 +506,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -533,7 +520,6 @@ Json params:
 ```
 Put /user/roles/remove
 
-Json params:
 {
     "system":system,
     "uid":uid,
@@ -543,7 +529,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -560,7 +546,7 @@ Get /user/blacklist?system={system}&uid={uid}
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message,
@@ -578,7 +564,6 @@ Get /user/blacklist?system={system}&uid={uid}
 ```
 Put /user/blacklist/add
 
-Json params:
 {
     "system":system,
     "uid":uid,
@@ -591,7 +576,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -605,7 +590,6 @@ Json params:
 ```
 Put /user/blacklist/remove
 
-Json params:
 {
     "system":system,
     "uid":uid,
@@ -615,7 +599,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -629,7 +613,6 @@ Json params:
 ```
 Put /user/blacklist/clear
 
-Json params:
 {
     "system":system,
     "uid":uid
@@ -638,7 +621,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -655,7 +638,7 @@ Get /user/whitelist?system={system}&uid={uid}
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message,
@@ -673,7 +656,6 @@ Get /user/whitelist?system={system}&uid={uid}
 ```
 Put /user/whitelist
 
-Json params:
 {
     "system":system,
     "uid":uid,
@@ -686,7 +668,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -700,7 +682,6 @@ Json params:
 ```
 Put /user/whitelist/add
 
-Json params:
 {
     "system":system,
     "uid":uid,
@@ -713,7 +694,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -727,7 +708,6 @@ Json params:
 ```
 Put /user/whitelist/remove
 
-Json params:
 {
     "system":system,
     "uid":uid,
@@ -737,7 +717,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
@@ -751,7 +731,6 @@ Json params:
 ```
 Put /user/whitelist/clear
 
-Json params:
 {
     "system":system,
     "uid":uid
@@ -760,7 +739,7 @@ Json params:
 
 #### 响应
 
-```json
+```
 {
     "code": 0, // 0-success
     "message":message
