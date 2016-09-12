@@ -123,3 +123,10 @@ func TestPermission(t *testing.T) {
 	// remove permissions
 	assert.Nil(t, pdao.RemovePermissions(system, uid, "write", "read"))
 }
+
+func BenchmarkIsPermit(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		// pdao.SIsMembers("cowshed_uid_admin_permissions", "read")
+		pdao.IsPermit("system", "uid_admin", "read")
+	}
+}
