@@ -8,33 +8,6 @@ import (
 	"github.com/nzqpeace/rbac/db"
 )
 
-type ForumPerm int
-
-const (
-	ForumPermRead ForumPerm = iota
-	ForumPermPost
-	ForumPermReply
-	ForumPermComment
-	ForumPermDelete
-)
-
-func (f ForumPerm) String() string {
-	switch f {
-	case ForumPermRead:
-		return "read"
-	case ForumPermPost:
-		return "post"
-	case ForumPermReply:
-		return "reply"
-	case ForumPermComment:
-		return "comment"
-	case ForumPermDelete:
-		return "delete"
-	default:
-		return "unknown"
-	}
-}
-
 var (
 	r *rbac.RBAC
 )
