@@ -37,8 +37,6 @@ func TestSet(t *testing.T) {
 	// check members
 	members, err := r.SMembers(key)
 	assert.Nil(t, err)
-	assert.Equal(t, members[0], "Cowshed0")
-	assert.Equal(t, members[1], "Cowshed1")
 
 	// check not exist element
 	exist, err = r.SIsMembers(key, "Cowshed1")
