@@ -13,7 +13,7 @@ import:
 - package: github.com/imdario/mergo
   version: ^0.2.2
 - package: github.com/kataras/iris
-  version: ^4.1.1
+  version: ae5ba6fe7e6a7f99f25310986bbc7a6745020b17
 - package: gopkg.in/mgo.v2
   subpackages:
   - bson

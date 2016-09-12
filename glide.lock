@@ -1,5 +1,5 @@
-hash: 10f9fda47fa84a64695eaabe5b92678e4b0cef3dfe7c1d0333ce33fd3fdb4573
-updated: 2016-09-12T13:03:55.253987644+08:00
+hash: 0971de18bd06b5a9548daf8d33b44c01a98a35ed9eaea756586d06970210c0b3
+updated: 2016-09-12T16:50:59.585785961+08:00
 imports:
 - name: github.com/ajg/form
   version: 523a5da1a92f01b01f840b61689c0340a0243532
@@ -36,29 +36,10 @@ imports:
   version: 3e95a51e0639b4cf372f2ccf74c86749d747fbdc
 - name: github.com/imkira/go-interpol
   version: b9781c93ae51c8b4fc3af1b1426909721af0a624
-- name: github.com/iris-contrib/color
-  version: 1f565954a55c42b9c66ead36206e91e1d79bafa1
-- name: github.com/iris-contrib/errors
-  version: 9d4599565f75fd376a8e4ae5ccc98fc078b93b69
 - name: github.com/iris-contrib/formBinder
   version: 32009bbc76eda475a6d1eb24787d1fdcdaf80e71
 - name: github.com/iris-contrib/letsencrypt
   version: 2a9ed749d24d8d2a8ece891b7b6242f0b3192d62
-- name: github.com/iris-contrib/logger
-  version: 6a08b11d1faefa8ce79ed6d6efec9d2e05cbc549
-- name: github.com/iris-contrib/response
-  version: 959c7b8c27718d5a7a3d83ad05d677ae234e1152
-  subpackages:
-  - data
-  - json
-  - jsonp
-  - markdown
-  - text
-  - xml
-- name: github.com/iris-contrib/template
-  version: 53895cd7ea0a067c4f81b71af0d91ff0b6b4ba1d
-  subpackages:
-  - html
 - name: github.com/iris-contrib/websocket
   version: 5822d5825abd388d92ecdf42024dc2ad1a5ce1ba
 - name: github.com/kardianos/osext
@@ -69,12 +50,28 @@ imports:
   version: 899494cdab02af450e8321bebcb987ba46ab5874
 - name: github.com/kataras/go-fs
   version: 2e94d5ee88c9bbffddf40867282faa0efba6060c
+- name: github.com/kataras/go-options
+  version: 23b556c1b935c594ec6d71ff81ead4dbeec3aa8d
+- name: github.com/kataras/go-serializer
+  version: 959c7b8c27718d5a7a3d83ad05d677ae234e1152
+  subpackages:
+  - data
+  - json
+  - jsonp
+  - markdown
+  - text
+  - xml
+- name: github.com/kataras/go-sessions
+  version: 9c2587eb62a41ceb715ad06e1b2746e037a39559
+- name: github.com/kataras/go-template
+  version: 53895cd7ea0a067c4f81b71af0d91ff0b6b4ba1d
+  subpackages:
+  - html
 - name: github.com/kataras/go-websocket
   version: 3a4e852e0dc15cff13d4b212a095aa5f041dd4d1
 - name: github.com/kataras/iris
-  version: d03c9ad231b9963b5cf0f7c3aea0bea73ed811ce
+  version: ae5ba6fe7e6a7f99f25310986bbc7a6745020b17
   subpackages:
-  - config
   - context
   - utils
 - name: github.com/klauspost/compress
@@ -87,16 +84,14 @@ imports:
   version: 09cded8978dc9e80714c4d85b0322337b0a1e5e0
 - name: github.com/klauspost/crc32
   version: 19b0b332c9e4516a6370a0456e6182c3b5036720
-- name: github.com/mattn/go-colorable
-  version: ed8eb9e318d7a84ce5915b495b7d35e0cfe7b5a8
-- name: github.com/mattn/go-isatty
-  version: 66b8e73f3f5cda9f96b69efd03dd3d7fc4a5cdb8
 - name: github.com/microcosm-cc/bluemonday
   version: 7d0cad0ac7ef5e3afd74816444b44b56327422a4
+- name: github.com/miekg/dns
+  version: db96a2b759cdef4f11a34506a42eb8d1290c598e
 - name: github.com/moul/http2curl
   version: b1479103caacaa39319f75e7f57fc545287fca0d
 - name: github.com/nzqpeace/rbac
-  version: 9a2919e71e4a94cd75a33e054c76cef6792fa9c1
+  version: 3c3c423c37a24ce5c34b180da06fc06efbb63d6f
   subpackages:
   - cache
   - db
@@ -133,6 +128,10 @@ imports:
   version: e02fc20de94c78484cd5ffb007f8af96be030a45
 - name: github.com/xeipuuv/gojsonschema
   version: 3f368bbe0e3d19097637bbdf8fdc5383ec1e25e5
+- name: github.com/xenolf/lego
+  version: 82ac43327b01319544c050d5d78a4edeff9565d2
+  subpackages:
+  - acme
 - name: github.com/yalp/jsonpath
   version: 31a79c7593bb93eb10b163650d4a3e6ca190e4dc
 - name: github.com/yudai/golcs
@@ -144,11 +143,13 @@ imports:
   - ssh/terminal
   - curve25519
   - ed25519
+  - ocsp
   - ed25519/internal/edwards25519
 - name: golang.org/x/net
   version: cfe3c2a7525b50c3d707256e371c90938cfef98a
   subpackages:
   - publicsuffix
+  - context
   - html
   - html/atom
 - name: golang.org/x/sys
@@ -160,6 +161,10 @@ imports:
   - windows/svc/eventlog
   - windows/svc/mgr
   - windows
+- name: golang.org/x/time
+  version: a4bde12657593d5e90d0533a3e4fd95e635124cb
+  subpackages:
+  - rate
 - name: gopkg.in/mgo.v2
   version: 3f83fa5005286a7fe593b055f0d7771a7dce4655
   subpackages:
@@ -167,6 +172,11 @@ imports:
   - internal/sasl
   - internal/scram
   - internal/json
+- name: gopkg.in/square/go-jose.v1
+  version: 139276ceb5afbf13e636c44e9382f0ca75c12ba3
+  subpackages:
+  - cipher
+  - json
 testImports:
 - name: github.com/stretchr/testify
   version: f390dcf405f7b83c997eac1b06768bb9f44dec18
