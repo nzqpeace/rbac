@@ -16,11 +16,14 @@ const DefaultConfigFile = "config.json"
 var (
 	showUsage  bool
 	configFile string
+	cpuprofile string
 )
 
 func init() {
-	flag.BoolVar(&showUsage, "-h", false, "show help message")
-	flag.StringVar(&configFile, "-f", "", "config file")
+	flag.BoolVar(&showUsage, "h", false, "show help message")
+	flag.StringVar(&configFile, "f", "", "config file")
+
+	validate = validator.New()
 }
 
 func setLogLevel(level string) {
@@ -56,11 +59,8 @@ func setOutput(output string) {
 
 var validate *validator.Validate
 
-func init() {
-	validate = validator.New()
-}
-
 func main() {
+	flag.Parse()
 	if showUsage {
 		flag.Usage()
 		return
