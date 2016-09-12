@@ -127,6 +127,6 @@ func TestPermission(t *testing.T) {
 func BenchmarkIsPermit(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		// pdao.SIsMembers("cowshed_uid_admin_permissions", "read")
-		pdao.IsPermit("system", "uid_admin", "read")
+		pdao.IsPermit("cowshed", "uid_admin", "read")
 	}
 }

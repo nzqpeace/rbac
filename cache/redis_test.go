@@ -58,7 +58,6 @@ func TestSet(t *testing.T) {
 }
 
 func BenchmarkIsMembers(b *testing.B) {
-	b.N = 100000
 	for i := 0; i < b.N; i++ {
 		r.SIsMembers("cowshed_uid_admin_permissions", "read")
 	}
