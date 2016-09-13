@@ -20,7 +20,7 @@ func init() {
 	config := &RedisConfig{
 		Address:       ":6379",
 		Password:      "",
-		DB:            1,
+		DB:            0,
 		MaxConn:       100,
 		IdleTimeout:   60,
 		RetryInterval: 3,
