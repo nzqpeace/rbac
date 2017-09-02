@@ -85,15 +85,17 @@ func main() {
 		"level":   config.Log.Level,
 	}).Info("create log success")
 
-	err := registerRoute(config)
+	app := iris.New()
+	err := registerRoute(app, config)
 	if err != nil {
 		log.Error(err)
 		return
 	}
 
-	startHttpServer(config.Http)
+	startHttpServer(app, config.Http)
 }
 
-func startHttpServer(config *HttpServerConfig) {
-	iris.Listen(config.Address)
+func startHttpServer(app *iris.Application, config *HttpServerConfig) {
+	app := iris.New()
+	app.Run(iris.Addr(config.Address))
 }

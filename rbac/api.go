@@ -3,13 +3,13 @@ package main
 import (
 	"errors"
 	"fmt"
-	"net/http"
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/kataras/iris"
 	"github.com/nzqpeace/rbac"
 	"github.com/nzqpeace/rbac/model"
+
+	"github.com/kataras/iris"
 )
 
 type RbacApi struct {
@@ -46,9 +46,10 @@ func NewRbacApi(config *Config) (*RbacApi, error) {
 	return &RbacApi{r}, nil
 }
 
-func validateParams(c *iris.Context, params interface{}) error {
+func validateParams(c iris.Context, params interface{}) error {
 	if err := c.ReadJSON(params); err != nil {
-		c.JSON(http.StatusBadRequest, iris.Map{
+		c.StatusCode(iris.StatusBadRequest)
+		c.JSON(iris.Map{
 			"code":    ErrBadPrams,
 			"message": err.Error(),
 		})
@@ -56,7 +57,8 @@ func validateParams(c *iris.Context, params interface{}) error {
 	}
 
 	if err := validate.Struct(params); err != nil {
-		c.JSON(http.StatusBadRequest, iris.Map{
+		c.StatusCode(iris.StatusBadRequest)
+		c.JSON(iris.Map{
 			"code":    ErrBadPrams,
 			"message": err.Error(),
 		})
@@ -66,13 +68,14 @@ func validateParams(c *iris.Context, params interface{}) error {
 	return nil
 }
 
-func checkUrlParams(c *iris.Context, names ...string) (params map[string]string, err error) {
+func checkUrlParams(c iris.Context, names ...string) (params map[string]string, err error) {
 	params = make(map[string]string)
 	for _, name := range names {
 		value := c.URLParam(name)
 		if value == "" {
 			message := fmt.Sprintf("miss parameter[%s]", name)
-			c.JSON(http.StatusBadRequest, iris.Map{
+			c.StatusCode(iris.StatusBadRequest)
+			c.JSON(iris.Map{
 				"code":    ErrBadPrams,
 				"message": message,
 			})
@@ -83,45 +86,48 @@ func checkUrlParams(c *iris.Context, names ...string) (params map[string]string,
 	return
 }
 
-func (api *RbacApi) responseByError(c *iris.Context, err error) {
+func (api *RbacApi) responseByError(c iris.Context, err error) {
 	if err != nil {
 		if strings.Contains(err.Error(), NotFound) {
-			c.JSON(http.StatusOK, iris.Map{
+			c.StatusCode(iris.StatusOK)
+			c.JSON(iris.Map{
 				"code":    ErrNotFound,
 				"message": err.Error(),
 			})
 			return
 		}
-
-		c.JSON(http.StatusInternalServerError, iris.Map{
+		c.StatusCode(iris.StatusInternalServerError)
+		c.JSON(iris.Map{
 			"code":    ErrInternelServerError,
 			"message": err.Error(),
 		})
 		return
 	}
-	c.JSON(http.StatusOK, iris.Map{
+	c.JSON(iris.Map{
 		"code":    ErrOK,
 		"message": Success,
 	})
 }
 
-func (api *RbacApi) responseAdditionData(c *iris.Context, err error, jsonKey string, jsonValue interface{}) {
+func (api *RbacApi) responseAdditionData(c iris.Context, err error, jsonKey string, jsonValue interface{}) {
 	if err != nil {
 		if strings.Contains(err.Error(), NotFound) {
-			c.JSON(http.StatusOK, iris.Map{
+			c.StatusCode(iris.StatusOK)
+			c.JSON(iris.Map{
 				"code":    ErrNotFound,
 				"message": err.Error(),
 			})
 			return
 		}
 
-		c.JSON(http.StatusInternalServerError, iris.Map{
+		c.StatusCode(iris.StatusInternalServerError)
+		c.JSON(iris.Map{
 			"code":    ErrInternelServerError,
 			"message": err.Error(),
 		})
 		return
 	}
-	c.JSON(http.StatusOK, iris.Map{
+	c.JSON(iris.Map{
 		"code":    ErrOK,
 		"message": Success,
 		jsonKey:   jsonValue,
@@ -129,7 +135,7 @@ func (api *RbacApi) responseAdditionData(c *iris.Context, err error, jsonKey str
 }
 
 // IsPermit check whether have specified permission
-func (api *RbacApi) IsPermit(c *iris.Context) {
+func (api *RbacApi) IsPermit(c iris.Context) {
 	params, err := checkUrlParams(c, "system", "uid", "permission")
 	if err != nil {
 		return
@@ -140,7 +146,7 @@ func (api *RbacApi) IsPermit(c *iris.Context) {
 }
 
 // RegisterPermission register permission
-func (api *RbacApi) RegisterPermission(c *iris.Context) {
+func (api *RbacApi) RegisterPermission(c iris.Context) {
 	var p model.Permission
 	if validateParams(c, &p) != nil {
 		return
@@ -151,7 +157,7 @@ func (api *RbacApi) RegisterPermission(c *iris.Context) {
 }
 
 // UnregisterPermission remove permission from system
-func (api *RbacApi) UnregisterPermission(c *iris.Context) {
+func (api *RbacApi) UnregisterPermission(c iris.Context) {
 	var p model.Permission
 	if validateParams(c, &p) != nil {
 		return
@@ -162,7 +168,7 @@ func (api *RbacApi) UnregisterPermission(c *iris.Context) {
 }
 
 // GetAllPermissionsBySystem get all permissions of specified system
-func (api *RbacApi) GetAllPermissionsBySystem(c *iris.Context) {
+func (api *RbacApi) GetAllPermissionsBySystem(c iris.Context) {
 	params, err := checkUrlParams(c, "system")
 	if err != nil {
 		return
@@ -170,7 +176,8 @@ func (api *RbacApi) GetAllPermissionsBySystem(c *iris.Context) {
 
 	ps, err := api.rbac.GetAllPermissionsBySystem(params["system"])
 	if err != nil && strings.Contains(err.Error(), NotFound) {
-		c.JSON(http.StatusOK, iris.Map{
+		c.StatusCode(iris.StatusOK)
+		c.JSON(iris.Map{
 			"code":    ErrNotFound,
 			"message": err.Error(),
 		})
@@ -181,7 +188,7 @@ func (api *RbacApi) GetAllPermissionsBySystem(c *iris.Context) {
 }
 
 // UpdatePermission update permission
-func (api *RbacApi) UpdatePermission(c *iris.Context) {
+func (api *RbacApi) UpdatePermission(c iris.Context) {
 	var p struct {
 		System  string `json:"system" validate:"required"`
 		OldName string `json:"oldname" validate:"required"`
@@ -196,7 +203,7 @@ func (api *RbacApi) UpdatePermission(c *iris.Context) {
 }
 
 // RegisterRole register role
-func (api *RbacApi) RegisterRole(c *iris.Context) {
+func (api *RbacApi) RegisterRole(c iris.Context) {
 	var role model.Role
 	if validateParams(c, &role) != nil {
 		return
@@ -207,7 +214,7 @@ func (api *RbacApi) RegisterRole(c *iris.Context) {
 }
 
 // UnregisterRole unregister specified role of specified system
-func (api *RbacApi) UnregisterRole(c *iris.Context) {
+func (api *RbacApi) UnregisterRole(c iris.Context) {
 	var role struct {
 		System string `json:"system" validate:"required"`
 		Name   string `json:"name" validate:"required"`
@@ -221,7 +228,7 @@ func (api *RbacApi) UnregisterRole(c *iris.Context) {
 }
 
 // UnregisterAllRoles unregister all role of specified system
-func (api *RbacApi) UnregisterAllRoles(c *iris.Context) {
+func (api *RbacApi) UnregisterAllRoles(c iris.Context) {
 	var role struct {
 		System string `json:"system" validate:"required"`
 		Name   string `json:"name" validate:"required"`
@@ -235,7 +242,7 @@ func (api *RbacApi) UnregisterAllRoles(c *iris.Context) {
 }
 
 // GetRoleOfSystem get specified role of system by name
-func (api *RbacApi) GetRoleOfSystem(c *iris.Context) {
+func (api *RbacApi) GetRoleOfSystem(c iris.Context) {
 	params, err := checkUrlParams(c, "system", "role")
 	if err != nil {
 		return
@@ -243,7 +250,8 @@ func (api *RbacApi) GetRoleOfSystem(c *iris.Context) {
 
 	role, err := api.rbac.GetRoleOfSystem(params["system"], params["role"])
 	if err != nil && strings.Contains(err.Error(), NotFound) {
-		c.JSON(http.StatusOK, iris.Map{
+		c.StatusCode(iris.StatusOK)
+		c.JSON(iris.Map{
 			"code":    ErrNotFound,
 			"message": err.Error(),
 		})
@@ -254,7 +262,7 @@ func (api *RbacApi) GetRoleOfSystem(c *iris.Context) {
 }
 
 // GetAllRolesOfSystem get all roles of specified system
-func (api *RbacApi) GetAllRolesOfSystem(c *iris.Context) {
+func (api *RbacApi) GetAllRolesOfSystem(c iris.Context) {
 	params, err := checkUrlParams(c, "system")
 	if err != nil {
 		return
@@ -262,7 +270,8 @@ func (api *RbacApi) GetAllRolesOfSystem(c *iris.Context) {
 
 	roles, err := api.rbac.GetAllRolesOfSystem(params["system"])
 	if err != nil && strings.Contains(err.Error(), NotFound) {
-		c.JSON(http.StatusOK, iris.Map{
+		c.StatusCode(iris.StatusOK)
+		c.JSON(iris.Map{
 			"code":    ErrNotFound,
 			"message": err.Error(),
 		})
@@ -273,7 +282,7 @@ func (api *RbacApi) GetAllRolesOfSystem(c *iris.Context) {
 }
 
 // UpdateRoleName update name of specified role
-func (api *RbacApi) UpdateRoleName(c *iris.Context) {
+func (api *RbacApi) UpdateRoleName(c iris.Context) {
 	var p struct {
 		System  string `json:"system" validate:"required"`
 		OldName string `json:"oldname" validate:"required"`
@@ -288,7 +297,7 @@ func (api *RbacApi) UpdateRoleName(c *iris.Context) {
 }
 
 // GetPermissionsOfRole get all permissions of role
-func (api *RbacApi) GetPermissionsOfRole(c *iris.Context) {
+func (api *RbacApi) GetPermissionsOfRole(c iris.Context) {
 	params, err := checkUrlParams(c, "system", "role")
 	if err != nil {
 		return
@@ -296,7 +305,8 @@ func (api *RbacApi) GetPermissionsOfRole(c *iris.Context) {
 
 	ps, err := api.rbac.GetPermissionsOfRole(params["system"], params["role"])
 	if err != nil && strings.Contains(err.Error(), NotFound) {
-		c.JSON(http.StatusOK, iris.Map{
+		c.StatusCode(iris.StatusOK)
+		c.JSON(iris.Map{
 			"code":    ErrNotFound,
 			"message": err.Error(),
 		})
@@ -307,7 +317,7 @@ func (api *RbacApi) GetPermissionsOfRole(c *iris.Context) {
 }
 
 // GrantPermissionsToRole grant specified permissions to role
-func (api *RbacApi) GrantPermissionsToRole(c *iris.Context) {
+func (api *RbacApi) GrantPermissionsToRole(c iris.Context) {
 	var p struct {
 		System      string   `json:"system" validate:"required"`
 		Role        string   `json:"role" validate:"required"`
@@ -322,7 +332,7 @@ func (api *RbacApi) GrantPermissionsToRole(c *iris.Context) {
 }
 
 // RemovePermissionFromRole remove specified permission from specified role
-func (api *RbacApi) RemovePermissionFromRole(c *iris.Context) {
+func (api *RbacApi) RemovePermissionFromRole(c iris.Context) {
 	var p struct {
 		System     string `json:"system" validate:"required"`
 		Role       string `json:"role" validate:"required"`
@@ -337,7 +347,7 @@ func (api *RbacApi) RemovePermissionFromRole(c *iris.Context) {
 }
 
 // RegisterUser register user permission info into mongo
-func (api *RbacApi) RegisterUser(c *iris.Context) {
+func (api *RbacApi) RegisterUser(c iris.Context) {
 	var p model.UserPermModel
 	if validateParams(c, &p) != nil {
 		return
@@ -348,7 +358,7 @@ func (api *RbacApi) RegisterUser(c *iris.Context) {
 }
 
 // UnregisterUser remove user info from mongo
-func (api *RbacApi) UnregisterUser(c *iris.Context) {
+func (api *RbacApi) UnregisterUser(c iris.Context) {
 	var p struct {
 		System string `json:"system" validate:"required"`
 		UID    string `json:"uid" validate:"required"`
@@ -362,7 +372,7 @@ func (api *RbacApi) UnregisterUser(c *iris.Context) {
 }
 
 // UpdateUser update user info
-func (api *RbacApi) UpdateUser(c *iris.Context) {
+func (api *RbacApi) UpdateUser(c iris.Context) {
 	var p struct {
 		System   string   `json:"system" validate:"required"`
 		UID      string   `json:"uid" validate:"required"`
@@ -377,7 +387,7 @@ func (api *RbacApi) UpdateUser(c *iris.Context) {
 }
 
 // GetUser get user info
-func (api *RbacApi) GetUser(c *iris.Context) {
+func (api *RbacApi) GetUser(c iris.Context) {
 	params, err := checkUrlParams(c, "system", "uid")
 	if err != nil {
 		return
@@ -388,7 +398,7 @@ func (api *RbacApi) GetUser(c *iris.Context) {
 }
 
 // GetAllRolesByUID get all roles with uid
-func (api *RbacApi) GetAllRolesByUID(c *iris.Context) {
+func (api *RbacApi) GetAllRolesByUID(c iris.Context) {
 	params, err := checkUrlParams(c, "system", "uid")
 	if err != nil {
 		return
@@ -399,7 +409,7 @@ func (api *RbacApi) GetAllRolesByUID(c *iris.Context) {
 }
 
 // UpdateRoles update user's all roles
-func (api *RbacApi) UpdateRoles(c *iris.Context) {
+func (api *RbacApi) UpdateRoles(c iris.Context) {
 	var p model.UserPermModel
 	if validateParams(c, &p) != nil {
 		return
@@ -410,7 +420,7 @@ func (api *RbacApi) UpdateRoles(c *iris.Context) {
 }
 
 // AddRoles add specified roles into user's permission model
-func (api *RbacApi) AddRoles(c *iris.Context) {
+func (api *RbacApi) AddRoles(c iris.Context) {
 	var p model.UserPermModel
 	if validateParams(c, &p) != nil {
 		return
@@ -421,7 +431,7 @@ func (api *RbacApi) AddRoles(c *iris.Context) {
 }
 
 // RemoveRoles remove specified role from user's permission model
-func (api *RbacApi) RemoveRoles(c *iris.Context) {
+func (api *RbacApi) RemoveRoles(c iris.Context) {
 	var p struct {
 		System string `json:"system"  validate:"required"`
 		UID    string `json:"uid" validate:"required"`
@@ -436,7 +446,7 @@ func (api *RbacApi) RemoveRoles(c *iris.Context) {
 }
 
 // GetBlackList get user permission model's blacklist, which contain all permissions forbidden
-func (api *RbacApi) GetBlackList(c *iris.Context) {
+func (api *RbacApi) GetBlackList(c iris.Context) {
 	params, err := checkUrlParams(c, "system", "uid")
 	if err != nil {
 		return
@@ -447,7 +457,7 @@ func (api *RbacApi) GetBlackList(c *iris.Context) {
 }
 
 // AddToBlackList add specified permissions into user permission model's blacklist
-func (api *RbacApi) AddToBlackList(c *iris.Context) {
+func (api *RbacApi) AddToBlackList(c iris.Context) {
 	var p struct {
 		System      string   `json:"system"  validate:"required"`
 		UID         string   `json:"uid" validate:"required"`
@@ -462,7 +472,7 @@ func (api *RbacApi) AddToBlackList(c *iris.Context) {
 }
 
 // RemoveFromBlackList remove specified permission from blacklist
-func (api *RbacApi) RemoveFromBlackList(c *iris.Context) {
+func (api *RbacApi) RemoveFromBlackList(c iris.Context) {
 	var p struct {
 		System     string `json:"system"  validate:"required"`
 		UID        string `json:"uid" validate:"required"`
@@ -477,7 +487,7 @@ func (api *RbacApi) RemoveFromBlackList(c *iris.Context) {
 }
 
 // ClearBlackList clear blacklist
-func (api *RbacApi) ClearBlackList(c *iris.Context) {
+func (api *RbacApi) ClearBlackList(c iris.Context) {
 	var p struct {
 		System string `json:"system"  validate:"required"`
 		UID    string `json:"uid" validate:"required"`
@@ -491,7 +501,7 @@ func (api *RbacApi) ClearBlackList(c *iris.Context) {
 }
 
 // GetWhiteList get user permission model's whitelist, which contain all permissions allowed all the time
-func (api *RbacApi) GetWhiteList(c *iris.Context) {
+func (api *RbacApi) GetWhiteList(c iris.Context) {
 	params, err := checkUrlParams(c, "system", "uid")
 	if err != nil {
 		return
@@ -502,7 +512,7 @@ func (api *RbacApi) GetWhiteList(c *iris.Context) {
 }
 
 // UpdateWhiteList update whitelist with 'wl'
-func (api *RbacApi) UpdateWhiteList(c *iris.Context) {
+func (api *RbacApi) UpdateWhiteList(c iris.Context) {
 	var p struct {
 		System    string   `json:"system"  validate:"required"`
 		UID       string   `json:"uid" validate:"required"`
@@ -517,7 +527,7 @@ func (api *RbacApi) UpdateWhiteList(c *iris.Context) {
 }
 
 // AddToWhiteList add specified permission into user permission model's whitelist
-func (api *RbacApi) AddToWhiteList(c *iris.Context) {
+func (api *RbacApi) AddToWhiteList(c iris.Context) {
 	var p struct {
 		System      string   `json:"system"  validate:"required"`
 		UID         string   `json:"uid" validate:"required"`
@@ -532,7 +542,7 @@ func (api *RbacApi) AddToWhiteList(c *iris.Context) {
 }
 
 // RemoveFromWhiteList remove specified permission from user's permission model's whitelist
-func (api *RbacApi) RemoveFromWhiteList(c *iris.Context) {
+func (api *RbacApi) RemoveFromWhiteList(c iris.Context) {
 	var p struct {
 		System     string `json:"system"  validate:"required"`
 		UID        string `json:"uid" validate:"required"`
@@ -547,7 +557,7 @@ func (api *RbacApi) RemoveFromWhiteList(c *iris.Context) {
 }
 
 // ClearWhiteList clear all permission at user's permission model's whitelist
-func (api *RbacApi) ClearWhiteList(c *iris.Context) {
+func (api *RbacApi) ClearWhiteList(c iris.Context) {
 	var p struct {
 		System string `json:"system"  validate:"required"`
 		UID    string `json:"uid" validate:"required"`

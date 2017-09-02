@@ -5,7 +5,7 @@ import (
 	"github.com/kataras/iris"
 )
 
-func registerRoute(config *Config) error {
+func registerRoute(app *iris.Application, config *Config) error {
 	rbacAPI, err := NewRbacApi(config)
 	if err != nil {
 		log.Error(err)
@@ -21,7 +21,7 @@ func registerRoute(config *Config) error {
 	//     "message":message,
 	//     "permit":true // true or false
 	// }
-	iris.Get("/authenticate", rbacAPI.IsPermit)
+	app.Get("/authenticate", rbacAPI.IsPermit)
 
 	// register permission
 	// Json params:
@@ -36,7 +36,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Post("/permission", rbacAPI.RegisterPermission)
+	app.Post("/permission", rbacAPI.RegisterPermission)
 
 	// unregister permission
 	// Json params:
@@ -51,7 +51,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Delete("/permission", rbacAPI.UnregisterPermission)
+	app.Delete("/permission", rbacAPI.UnregisterPermission)
 
 	// get all permissions by system
 	// URL params: system
@@ -73,7 +73,7 @@ func registerRoute(config *Config) error {
 	//         }
 	//     ]
 	// }
-	iris.Get("/permission", rbacAPI.GetAllPermissionsBySystem)
+	app.Get("/permission", rbacAPI.GetAllPermissionsBySystem)
 
 	// update permission
 	// Json params
@@ -88,7 +88,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/permission", rbacAPI.UpdatePermission)
+	app.Put("/permission", rbacAPI.UpdatePermission)
 
 	// register role
 	// Json params:
@@ -107,7 +107,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Post("/role", rbacAPI.RegisterRole)
+	app.Post("/role", rbacAPI.RegisterRole)
 
 	// unregister role
 	// Json params:
@@ -121,7 +121,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Delete("/role", rbacAPI.UnregisterRole)
+	app.Delete("/role", rbacAPI.UnregisterRole)
 
 	// get specified role by system and role name
 	// URL params: system, role
@@ -140,7 +140,7 @@ func registerRoute(config *Config) error {
 	//         ]
 	//     }
 	// }
-	iris.Get("/role", rbacAPI.GetRoleOfSystem)
+	app.Get("/role", rbacAPI.GetRoleOfSystem)
 
 	// get all roles by system
 	// URL params: system
@@ -170,7 +170,7 @@ func registerRoute(config *Config) error {
 	//         }
 	//     ]
 	// }
-	iris.Get("/role/all", rbacAPI.GetAllRolesOfSystem)
+	app.Get("/role/all", rbacAPI.GetAllRolesOfSystem)
 
 	// update role name
 	// Json params:
@@ -185,7 +185,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/role", rbacAPI.UpdateRoleName)
+	app.Put("/role", rbacAPI.UpdateRoleName)
 
 	// get all permissions of specified role
 	// URL params: system, role
@@ -199,7 +199,7 @@ func registerRoute(config *Config) error {
 	//         "permission2"
 	//     ]
 	// }
-	iris.Get("/role/permissions", rbacAPI.GetPermissionsOfRole)
+	app.Get("/role/permissions", rbacAPI.GetPermissionsOfRole)
 
 	// grant permissions to specified role
 	// Json params:
@@ -217,7 +217,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/role/permissions/grant", rbacAPI.GrantPermissionsToRole)
+	app.Put("/role/permissions/grant", rbacAPI.GrantPermissionsToRole)
 
 	// remove permission from specified role
 	// Json params:
@@ -232,7 +232,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/role/permissions/remove", rbacAPI.RemovePermissionFromRole)
+	app.Put("/role/permissions/remove", rbacAPI.RemovePermissionFromRole)
 
 	// register user
 	// Json params:
@@ -250,7 +250,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Post("/user", rbacAPI.RegisterUser)
+	app.Post("/user", rbacAPI.RegisterUser)
 
 	// unregister user
 	// Json params:
@@ -264,7 +264,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Delete("/user", rbacAPI.UnregisterUser)
+	app.Delete("/user", rbacAPI.UnregisterUser)
 
 	// register user
 	// Json params:
@@ -282,7 +282,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/user", rbacAPI.UpdateUser)
+	app.Put("/user", rbacAPI.UpdateUser)
 
 	// get user permission info
 	// URL params: system, uid
@@ -308,7 +308,7 @@ func registerRoute(config *Config) error {
 	//         ]
 	//     }
 	// }
-	iris.Get("/user", rbacAPI.GetUser)
+	app.Get("/user", rbacAPI.GetUser)
 
 	// get all roles of specified user by uid
 	// URL params: system, uid
@@ -322,7 +322,7 @@ func registerRoute(config *Config) error {
 	//         "role2"
 	//     ]
 	// }
-	iris.Get("/user/roles", rbacAPI.GetAllRolesByUID)
+	app.Get("/user/roles", rbacAPI.GetAllRolesByUID)
 
 	// update roles of specified user by uid
 	// Json params:
@@ -340,7 +340,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/user/roles", rbacAPI.UpdateRoles)
+	app.Put("/user/roles", rbacAPI.UpdateRoles)
 
 	// add specified roles to user
 	// Json params:
@@ -358,7 +358,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/user/roles/add", rbacAPI.AddRoles)
+	app.Put("/user/roles/add", rbacAPI.AddRoles)
 
 	// remove specified role to user
 	// Json params:
@@ -373,7 +373,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/user/roles/remove", rbacAPI.RemoveRoles)
+	app.Put("/user/roles/remove", rbacAPI.RemoveRoles)
 
 	// get blacklist of specified user
 	// URL params: system, uid
@@ -387,7 +387,7 @@ func registerRoute(config *Config) error {
 	//         "permission2"
 	//     ]
 	// }
-	iris.Get("/user/blacklist", rbacAPI.GetBlackList)
+	app.Get("/user/blacklist", rbacAPI.GetBlackList)
 
 	// add specified permission into blacklist
 	// Json params:
@@ -405,7 +405,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/user/blacklist/add", rbacAPI.AddToBlackList)
+	app.Put("/user/blacklist/add", rbacAPI.AddToBlackList)
 
 	// remove specified permission from blacklist
 	// Json params:
@@ -420,7 +420,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/user/blacklist/remove", rbacAPI.RemoveFromBlackList)
+	app.Put("/user/blacklist/remove", rbacAPI.RemoveFromBlackList)
 
 	// clear blacklist
 	// Json params:
@@ -434,7 +434,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/user/blacklist/clear", rbacAPI.ClearBlackList)
+	app.Put("/user/blacklist/clear", rbacAPI.ClearBlackList)
 
 	// get whitelist of specified user
 	// URL params: system, uid
@@ -448,7 +448,7 @@ func registerRoute(config *Config) error {
 	//         "permission2"
 	//     ]
 	// }
-	iris.Get("/user/whitelist", rbacAPI.GetWhiteList)
+	app.Get("/user/whitelist", rbacAPI.GetWhiteList)
 
 	// update whitelist
 	// Json params:
@@ -466,7 +466,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/user/whitelist", rbacAPI.UpdateWhiteList)
+	app.Put("/user/whitelist", rbacAPI.UpdateWhiteList)
 
 	// add specified permission into whitelist
 	// Json params:
@@ -484,7 +484,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/user/whitelist/add", rbacAPI.AddToWhiteList)
+	app.Put("/user/whitelist/add", rbacAPI.AddToWhiteList)
 
 	// remove specified permission from whitelist
 	// Json params:
@@ -499,7 +499,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/user/whitelist/remove", rbacAPI.RemoveFromWhiteList)
+	app.Put("/user/whitelist/remove", rbacAPI.RemoveFromWhiteList)
 
 	// clear whitelist
 	// Json params:
@@ -513,7 +513,7 @@ func registerRoute(config *Config) error {
 	//     "code": 0, // 0-success
 	//     "message":message
 	// }
-	iris.Put("/user/whitelist/clear", rbacAPI.ClearWhiteList)
+	app.Put("/user/whitelist/clear", rbacAPI.ClearWhiteList)
 
 	return nil
 }
