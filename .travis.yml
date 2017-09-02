@@ -7,8 +7,10 @@ services:
     - mongodb
     - redis-server
 
-before_install:
-    mkdir $GOPATH/bin
+# comment these because of:
+# "The command "mkdir $GOPATH/bin" failed and exited with 1 during ."
+# before_install:
+#   mkdir $GOPATH/bin
 
 install:
     curl https://glide.sh/get | sh
