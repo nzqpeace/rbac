@@ -96,6 +96,5 @@ func main() {
 }
 
 func startHttpServer(app *iris.Application, config *HttpServerConfig) {
-	app := iris.New()
 	app.Run(iris.Addr(config.Address))
 }
