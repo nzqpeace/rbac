@@ -1,13 +1,14 @@
 language: go
 
 go:
-    - 1.6
-    - 1.7
-    - tip
+    - 1.9
 
 services:
     - mongodb
     - redis-server
+
+
+go_import_path: github.com/nzqpeace/rbac
 
 before_install:
     - sudo add-apt-repository ppa:masterminds/glide -y
@@ -15,7 +16,7 @@ before_install:
     - sudo apt-get install glide -y
 
 install:
-    curl https://glide.sh/get | sh
+    - go get ./...
 
 before_script:
     make get_deps

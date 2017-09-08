@@ -36,44 +36,29 @@ imports:
   version: 3e95a51e0639b4cf372f2ccf74c86749d747fbdc
 - name: github.com/imkira/go-interpol
   version: b9781c93ae51c8b4fc3af1b1426909721af0a624
-- name: github.com/iris-contrib/formBinder
-  version: 32009bbc76eda475a6d1eb24787d1fdcdaf80e71
-- name: github.com/iris-contrib/letsencrypt
-  version: 2a9ed749d24d8d2a8ece891b7b6242f0b3192d62
-- name: github.com/iris-contrib/websocket
-  version: 5822d5825abd388d92ecdf42024dc2ad1a5ce1ba
 - name: github.com/kardianos/osext
   version: c2c54e542fb797ad986b31721e1baedf214ca413
 - name: github.com/kardianos/service
   version: 7a88211485df5d3da6ec68f4f8a5ff9bec297327
-- name: github.com/kataras/go-errors
-  version: 899494cdab02af450e8321bebcb987ba46ab5874
-- name: github.com/kataras/go-fs
-  version: 2e94d5ee88c9bbffddf40867282faa0efba6060c
-- name: github.com/kataras/go-options
-  version: 23b556c1b935c594ec6d71ff81ead4dbeec3aa8d
-- name: github.com/kataras/go-serializer
-  version: 959c7b8c27718d5a7a3d83ad05d677ae234e1152
-  subpackages:
-  - data
-  - json
-  - jsonp
-  - markdown
-  - text
-  - xml
-- name: github.com/kataras/go-sessions
-  version: 9c2587eb62a41ceb715ad06e1b2746e037a39559
-- name: github.com/kataras/go-template
-  version: 53895cd7ea0a067c4f81b71af0d91ff0b6b4ba1d
-  subpackages:
-  - html
-- name: github.com/kataras/go-websocket
-  version: 3a4e852e0dc15cff13d4b212a095aa5f041dd4d1
+- name: github.com/kataras/golog
+version: 2ed680e7b1f34147164fa8073373e14fce02ac30
+- name: github.com/kataras/pio
+version: 825e39f34365e7db2c9fbc3692c16220e3bd7418
+- name: github.com/iris-contrib/httpexpect
+version: 65e93247e7071782e760f82086e8b677cca0c78a
 - name: github.com/kataras/iris
   version: ae5ba6fe7e6a7f99f25310986bbc7a6745020b17
   subpackages:
+  - cache
   - context
-  - utils
+  - core
+  - httptest
+  - middleware
+  - mvc
+  - sessions
+  - typescript
+  - view
+  - websocket
 - name: github.com/klauspost/compress
   version: 08fe86a420401e830c24114bdf9f1ba91331407a
   subpackages:
@@ -153,7 +138,7 @@ imports:
   - html
   - html/atom
 - name: golang.org/x/sys
-  version: 30de6d19a3bd89a5f38ae4028e23aaa5582648af
+  version: a07a691ac871746ae690ccf3ab217363b2144531
   subpackages:
   - unix
   - windows/registry
