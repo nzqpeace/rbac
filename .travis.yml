@@ -10,7 +10,9 @@ services:
     - redis-server
 
 before_install:
-    mkdir $GOPATH/bin
+    - sudo add-apt-repository ppa:masterminds/glide -y
+    - sudo apt-get update -q
+    - sudo apt-get install glide -y
 
 install:
     curl https://glide.sh/get | sh
