@@ -7,18 +7,13 @@ services:
     - mongodb
     - redis-server
 
-# comment these because of:
-# "The command "mkdir $GOPATH/bin" failed and exited with 1 during ."
-# before_install:
-#   mkdir $GOPATH/bin
 
-# comment these because of:
-# Sorry, we dont have a dist for your system: linux amd64
-# You can ask one here: https://github.com/Masterminds/glide/issues
-# Fail to install glide.
-# install:
-#     curl https://glide.sh/get | sh
 go_import_path: github.com/nzqpeace/rbac
+
+before_install:
+    - sudo add-apt-repository ppa:masterminds/glide -y
+    - sudo apt-get update -q
+    - sudo apt-get install glide -y
 
 install:
     - go get ./...
