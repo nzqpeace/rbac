@@ -5,7 +5,7 @@ Binary=rbac
 all:build
 
 get_deps:
-	glide install
+	go get ./...
 
 build:get_deps
 	go build -o ./rbac/${Binary} ./rbac/

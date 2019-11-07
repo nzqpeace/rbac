@@ -6,9 +6,9 @@ import (
 	"os"
 	"path"
 
-	log "github.com/Sirupsen/logrus"
-	"github.com/go-playground/validator"
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
+	log "github.com/sirupsen/logrus"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 const DefaultConfigFile = "config.json"
