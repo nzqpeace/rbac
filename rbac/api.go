@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/nzqpeace/rbac"
 	"github.com/nzqpeace/rbac/model"
+	log "github.com/sirupsen/logrus"
 
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 type RbacApi struct {

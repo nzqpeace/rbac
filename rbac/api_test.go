@@ -14,7 +14,7 @@ func BenchmarkAPI(b *testing.B) {
 		}
 
 		if resp.StatusCode != 200 {
-			b.Error("authenticate failed, %d", resp.StatusCode)
+			b.Errorf("authenticate failed, %d", resp.StatusCode)
 		}
 	}
 }
